@@ -13,10 +13,17 @@ async function authMiddleware(request, response, next) {
   const token = headerToken.split(" ")[1];
 
   try {
-    const response = firebase.auth.verifyIdToken(token);
-    if (response) next();
+    const decodedToken = firebase.auth.verifyIdToken(token);
+
+    if (decodedToken) {
+      const uid = decodedToken.uid;
+      req["uid"] = uid;
+    }
+    next();
   } catch (error) {
-    response.send({ message: "Please signUp first", error: error.message }).status(403);
+    response
+      .send({ message: "Please signUp first", error: error.message })
+      .status(403);
   }
 }
 
