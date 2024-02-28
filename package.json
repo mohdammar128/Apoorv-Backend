@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/mohdammar128/Apoorv_Points_tracker/issues"
   },
-  "homepage": "https://github.com/mohdammar128/Apoorv_Points_tracker#readme"
+  "homepage": "https://github.com/mohdammar128/Apoorv_Points_tracker#readme",
+  "devDependencies": {
+    "run-rs": "^0.7.7"
+  }
 }

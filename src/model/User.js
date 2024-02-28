@@ -25,13 +25,18 @@ const userSchema = new mongoose.Schema(
     // while signUp we will assign value to cuurentPoints based on the user(if user is client then we will set it zero and if its is shopkeeper then we will set the maximum limit )
     points: {
       type: Number,
-      require: true,
+      default: 0,
+
     },
     // A user can have multiple transactions that's why we are storing transactions as array elements
     transactionDetails: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Transaction",
     },
+    isActive: {
+      type: Boolean,
+      default: true
+    }
   },
   {
     timestamps: true,

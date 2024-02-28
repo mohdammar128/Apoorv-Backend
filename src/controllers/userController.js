@@ -22,7 +22,8 @@ async function signUp(req, res) {
 async function signIn(req, res) {
   console.log("signIn method is called");
   try {
-    const { uid } = req.body;
+    // this uid is inserted by middleware in the req 
+    const uid = req.uid || req.body.uid;
     if (!uid) {
       return res.status(400).send({ message: "Please provide the uid" });
     }
