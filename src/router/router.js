@@ -1,15 +1,17 @@
 const express = require("express");
-const authMiddleware = require("../middleware/authentication.js");
-const { signUp, getAllDetailsOfUser } = require("../controllers/userController.js")
+const { authMiddleware, isUserExistMiddleware } = require("../middleware/authentication.js");
+const { signUp, getAllDetailsOfUser, deleteUser, handleQuery } = require("../controllers/userController.js")
 const { transferPoints } = require("../controllers/transaction.js")
 const router = express.Router();
 const txnMiddlewarec = require("../middleware/transactionMiddleware.js")
 
+/* User related routes  */
+// authMiddleware, isUserExistMiddleware 
+router.post("/user", signUp);
+router.get('/user/:uid', getAllDetailsOfUser)
+router.get('/user/:uid', deleteUser)
+router.get('/user-list', handleQuery)
 
-// signUp 
-router.post("/user", authMiddleware, signUp);
-// get user details if its exist otherswise redirect them to signUp page based on backend status send to frontend 
-router.get('/:uid', getAllDetailsOfUser)
-// 
+/* transaction related routes */
 router.put("/transfer-points", txnMiddlewarec, transferPoints);
 module.exports = router;
