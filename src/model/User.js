@@ -4,23 +4,24 @@ const userSchema = new mongoose.Schema(
   {
     uid: {
       type: String,
-      require: true,
+      required: true,
     },
     email: {
       type: String,
-      require: true,
+      required: true,
     },
     rollNumber: {
-      type: String
+      type: String,
     },
     role: {
       type: String,
-      enum: ["shopKeeper", "client"],
+      enum: ["shop", "user"],
       default: "user",
+
     },
     fullName: {
       type: String,
-      require: true,
+      required: true,
     },
     // while signUp we will assign value to cuurentPoints based on the user(if user is client then we will set it zero and if its is shopkeeper then we will set the maximum limit )
     points: {
@@ -36,7 +37,13 @@ const userSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true
+    },
+
+    fromCollege: {
+      type: Boolean,
+      required: true
     }
+
   },
   {
     timestamps: true,

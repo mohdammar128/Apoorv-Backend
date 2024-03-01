@@ -1,3 +1,4 @@
+const User = require("../model/User")
 const firebase = require("../config/firebaseCofig.js");
 
 async function authMiddleware(request, response, next) {
@@ -17,7 +18,7 @@ async function authMiddleware(request, response, next) {
 
     if (decodedToken) {
       const uid = decodedToken.uid;
-      req["uid"] = uid;
+      req.body["uid"] = uid;
     }
     next();
   } catch (error) {
@@ -27,4 +28,18 @@ async function authMiddleware(request, response, next) {
   }
 }
 
-module.exports = authMiddleware;
+async function isUserExistMiddleware(req, res, next) {
+  try {
+    const { uid } = req.body;
+    const user = await User.findOne({ uid });
+    if (user) {
+      console.log("userId:", user._id);
+      return res.status(200).send({ message: "User already exist", success: true, userId: user._id })
+    }
+    next();
+  } catch (error) {
+    res.send(400).send({ message: `something went wrong ${error.message}`, success: false })
+  }
+}
+
+module.exports = { authMiddleware, isUserExistMiddleware };
