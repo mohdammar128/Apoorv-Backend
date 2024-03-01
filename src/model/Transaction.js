@@ -1,24 +1,25 @@
 const mongoose = require("mongoose");
-const User = require("./User");
 
 const transactionSchema = new mongoose.Schema(
   {
     transactionType: {
       type: String,
       enum: ["shopkeeper", "client"],
-      require: true,
+      required: true, // Corrected typo: 'required' instead of 'require'
     },
     from: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "User",
+      required: true, // Corrected typo: 'required' instead of 'require'
     },
     to: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "User",
+      required: true, // Corrected typo: 'required' instead of 'require'
     },
     transactionValue: {
       type: Number,
-      require: true
+      required: true, // Corrected typo: 'required' instead of 'require'
     }
   },
   {
@@ -29,3 +30,4 @@ const transactionSchema = new mongoose.Schema(
 const Transaction = mongoose.model("Transaction", transactionSchema);
 
 module.exports = Transaction;
+
