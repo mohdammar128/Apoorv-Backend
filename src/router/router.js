@@ -1,17 +1,29 @@
 const express = require("express");
-const { authMiddleware, isUserExistMiddleware } = require("../middleware/authentication.js");
-const { signUp, getAllDetailsOfUser, deleteUser, handleQuery } = require("../controllers/userController.js")
-const { transferPoints } = require("../controllers/transaction.js")
+const {
+  authMiddleware,
+  isUserExistMiddleware,
+} = require("../middleware/authentication.js");
+const {
+  signUp,
+  getAllDetailsOfUser,
+  deleteUser,
+  handleQuery,
+} = require("../controllers/userController.js");
+const {
+  transferPoints,
+  undoTransaction,
+} = require("../controllers/transaction.js");
 const router = express.Router();
-const txnMiddlewarec = require("../middleware/transactionMiddleware.js")
+const { txnMiddleware, isItSameTransaction } = require("../middleware/transactionMiddleware.js");
 
 /* User related routes  */
-// authMiddleware, isUserExistMiddleware 
+// authMiddleware, isUserExistMiddleware
 router.post("/user", signUp);
-router.get('/user/:uid', getAllDetailsOfUser)
-router.get('/user/:uid', deleteUser)
-router.get('/user-list', handleQuery)
+router.get("/user/:uid", getAllDetailsOfUser);
+router.get("/user/:uid", deleteUser);
+router.get("/user-list", handleQuery);
 
 /* transaction related routes */
-router.put("/transfer-points", txnMiddlewarec, transferPoints);
+router.post("/transaction", isItSameTransaction, txnMiddleware, transferPoints);
+router.delete("/transaction/:tid/undo", undoTransaction);
 module.exports = router;
