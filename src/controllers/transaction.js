@@ -71,7 +71,7 @@ async function undoTransaction(req, res) {
       { session, new: true }
     );
 
-    // Uncomment the line below if you want to delete the transaction after undoing
+
     await Transaction.deleteOne({ _id: tid }, { session });
 
     await session.commitTransaction();
@@ -92,5 +92,45 @@ async function undoTransaction(req, res) {
   }
 }
 
+async function fetchAllTransaction(req, res) {
+  const uid = req.params.uid;
 
-module.exports = { transferPoints, undoTransaction };
+  // Input validation (optional but recommended):
+  if (!uid) {
+    return res.status(400).send({ error: "Bad request: Missing user ID", success: false });
+  }
+
+  const pipeline = [
+    {
+      // Match transactions for the user (from or to)
+      $match: {
+        $or: [
+          { from: uid },
+          { to: uid },
+        ],
+      },
+    },
+    {
+      // Sort transactions in descending order of createdAt
+      $sort: { createdAt: -1 },
+    },
+  ];
+
+  try {
+    const transactions = await Transaction.aggregate(pipeline);
+
+    // Handle empty response gracefully
+    if (!transactions.length) {
+      return res.status(204).send({ message: "No transactions found for this user", success: true });
+    }
+
+    res.status(200).send({ transactions, success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Internal server error", success: false });
+  }
+}
+
+
+
+module.exports = { transferPoints, undoTransaction, fetchAllTransaction };
