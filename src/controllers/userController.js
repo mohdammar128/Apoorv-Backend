@@ -3,7 +3,7 @@ const User = require("../model/User");
 async function signUp(req, res) {
   try {
     const { uid, email, rollNumber, role, fullName, fromCollege, collegeName } = req.body;
-    if (!uid || !email || !rollNumber || !role || !fullName || !collegeName) {
+    if (!uid || !email || !rollNumber || !role || !fullName) {
       return res.status(400).send({ message: "Please_provide_required_field", success: false });
     }
 
@@ -76,7 +76,8 @@ async function handleQuery(req, res) {
       $match: {
         $and: [
           { fullName: new RegExp(searchKey, 'i') },
-          { isActive: true }
+          { isActive: true },
+          { role: "user" }
         ]
       }
     });
@@ -97,7 +98,7 @@ async function handleQuery(req, res) {
 
   try {
 
-    const results = aggregationPipeline.length !== 0 ? await User.aggregate(aggregationPipeline) : await User.find({ isActive: true }).sort({ fullName: 1 });
+    const results = aggregationPipeline.length !== 0 ? await User.aggregate(aggregationPipeline) : await User.find({ isActive: true, role: "user" }).sort({ fullName: 1 });
     res.status(200).send({ results, success: true });
   } catch (error) {
 
