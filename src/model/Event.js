@@ -4,23 +4,23 @@ const eventSchema = new mongoose.Schema(
   {
     eventName: {
       type: String,
-      required: true, // Corrected typo: 'required' instead of 'require'
+      required: true,
     },
     eventDescription: {
       type: String,
-      required: true, // Corrected typo: 'required' instead of 'require'
+      required: true,
     },
     startTime: {
       type: Date,
-      required: true, // Corrected typo: 'required' instead of 'require'
+      required: true,
     },
     endTime: {
       type: Date,
-      required: true, // Corrected typo: 'required' instead of 'require'
+      required: true,
     },
     imageUrl: {
       type: String,
-      default: "abcd",
+
     },
   },
   {

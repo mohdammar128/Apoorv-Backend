@@ -31,7 +31,7 @@ async function authMiddleware(request, response, next) {
 async function isUserExistMiddleware(req, res, next) {
   try {
     const { uid } = req.body;
-    const user = await User.findOne({ uid });
+    const user = await User.findOne({ uid, isActive: true });
     if (user) {
       console.log("userId:", user._id);
       return res.status(200).send({ message: "User already exist", success: true, userId: user._id })
