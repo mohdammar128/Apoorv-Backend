@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
     },
     rollNumber: {
       type: String,
+
     },
     role: {
       type: String,
@@ -29,11 +30,7 @@ const userSchema = new mongoose.Schema(
       default: 0,
 
     },
-    // A user can have multiple transactions that's why we are storing transactions as array elements
-    transactionDetails: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "Transaction",
-    },
+
     isActive: {
       type: Boolean,
       default: true
@@ -42,6 +39,9 @@ const userSchema = new mongoose.Schema(
     fromCollege: {
       type: Boolean,
       required: true
+    },
+    collegeName: {
+      type: String
     }
 
   },

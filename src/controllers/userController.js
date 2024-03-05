@@ -2,15 +2,13 @@ const User = require("../model/User");
 
 async function signUp(req, res) {
   try {
-    console.log("signUp page is called");
-    const { uid, email, rollNumber, role, fullName, fromCollege } = req.body;
-    console.log(uid, email, rollNumber, role, fullName, fromCollege);
-    if (!uid || !email || !rollNumber || !role || !fullName) {
+    const { uid, email, rollNumber, role, fullName, fromCollege, collegeName } = req.body;
+    if (!uid || !email || !rollNumber || !role || !fullName || !collegeName) {
       return res.status(400).send({ message: "Please_provide_required_field", success: false });
     }
 
     const newUser = new User({
-      uid, email, rollNumber, role, fullName, fromCollege
+      uid, email, rollNumber, role, fullName, fromCollege, collegeName
     });
     const response = await newUser.save();
     console.log(response._id);

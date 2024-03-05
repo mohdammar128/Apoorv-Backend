@@ -1,17 +1,12 @@
 const mongoose = require("mongoose")
 
 const homeFeedSchema = new mongoose.Schema({
-  title: {
+  text: {
     type: String,
-    default: "Welcome to Apoorv Mr Ammar"
-  },
-  feed: {
-    type: String,
-    default: "Abra Ka dabra"
+    required: true
   },
   imageUrl: {
     type: String,
-    default: "Image not found"
   }
 })
 
