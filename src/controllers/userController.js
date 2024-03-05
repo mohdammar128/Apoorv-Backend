@@ -72,7 +72,14 @@ async function handleQuery(req, res) {
   const aggregationPipeline = [];
 
   if (searchKey) {
-    aggregationPipeline.push({ $match: { fullName: new RegExp(searchKey, 'i') } });
+    aggregationPipeline.push({
+      $match: {
+        $and: [
+          { fullName: new RegExp(searchKey, 'i') },
+          { isActive: true }
+        ]
+      }
+    });
   }
 
   if (num) {
@@ -90,7 +97,7 @@ async function handleQuery(req, res) {
 
   try {
 
-    const results = aggregationPipeline.length !== 0 ? await User.aggregate(aggregationPipeline) : await User.find().sort({ fullName: 1 });
+    const results = aggregationPipeline.length !== 0 ? await User.aggregate(aggregationPipeline) : await User.find({ isActive: true }).sort({ fullName: 1 });
     res.status(200).send({ results, success: true });
   } catch (error) {
 
