@@ -1,36 +1,27 @@
 const User = require("../model/User")
-const firebase = require("../config/firebaseCofig.js");
+const admin = require("../config/firebaseCofig.js");
 
 async function authMiddleware(request, response, next) {
   const headerToken = request.headers.authorization;
-  if (!headerToken) {
-    return response.send({ message: "No token provided" }).status(401);
-  }
-
-  if (headerToken && headerToken.split(" ")[0] !== "Bearer") {
-    response.send({ message: "Invalid token" }).status(401);
-  }
-
-  const token = headerToken.split(" ")[1];
 
   try {
-    const decodedToken = firebase.auth.verifyIdToken(token);
-
+    const decodedToken = await admin.auth().verifyIdToken(headerToken);
+    console.log(decodedToken.uid)
     if (decodedToken) {
       const uid = decodedToken.uid;
-      req.body["uid"] = uid;
+      request.body["uid"] = uid;
     }
     next();
   } catch (error) {
-    response
-      .send({ message: "Please signUp first", error: error.message })
-      .status(403);
+    response.status(401)
+      .send({ message: "Please signUp first", error: error.message });
   }
 }
 
 async function isUserExistMiddleware(req, res, next) {
   try {
     const { uid } = req.body;
+    console.log(uid)
     const user = await User.findOne({ uid, isActive: true });
     if (user) {
       console.log("userId:", user._id);

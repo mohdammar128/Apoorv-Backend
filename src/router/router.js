@@ -19,7 +19,7 @@ const { txnMiddleware, isItSameTransaction } = require("../middleware/transactio
 
 /* User related routes  */
 // authMiddleware, isUserExistMiddleware
-router.post("/user", signUp);
+router.post("/user", authMiddleware, isUserExistMiddleware, signUp);
 router.get("/user/:uid", getAllDetailsOfUser);
 router.delete("/user/:uid", deleteUser);
 router.get("/user-list", handleQuery);
