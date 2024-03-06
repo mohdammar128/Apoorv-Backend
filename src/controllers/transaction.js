@@ -44,53 +44,53 @@ async function transferPoints(req, res) {
   }
 }
 
-async function undoTransaction(req, res) {
-  const tid = req.params.tid;
-  const session = await mongoose.startSession();
-  console.log("undo is called");
+// async function undoTransaction(req, res) {
+//   const tid = req.params.tid;
+//   const session = await mongoose.startSession();
+//   console.log("undo is called");
 
-  try {
-    const trxn = await Transaction.findOne({ _id: tid });
+//   try {
+//     const trxn = await Transaction.findOne({ _id: tid });
 
-    if (!trxn) {
-      return res.status(404).send({ error: "Transaction does not exist", success: false });
-    }
+//     if (!trxn) {
+//       return res.status(404).send({ error: "Transaction does not exist", success: false });
+//     }
 
-    console.log(trxn);
+//     console.log(trxn);
 
-    session.startTransaction();
-    await User.updateOne(
-      { uid: trxn.from },
-      { $inc: { points: trxn.transactionValue } },
-      { session, new: true }
-    );
+//     session.startTransaction();
+//     await User.updateOne(
+//       { uid: trxn.from },
+//       { $inc: { points: trxn.transactionValue } },
+//       { session, new: true }
+//     );
 
-    await User.updateOne(
-      { uid: trxn.to },
-      { $inc: { points: -trxn.transactionValue } },
-      { session, new: true }
-    );
+//     await User.updateOne(
+//       { uid: trxn.to },
+//       { $inc: { points: -trxn.transactionValue } },
+//       { session, new: true }
+//     );
 
 
-    await Transaction.deleteOne({ _id: tid }, { session });
+//     await Transaction.deleteOne({ _id: tid }, { session });
 
-    await session.commitTransaction();
+//     await session.commitTransaction();
 
-    res.status(200).send({
-      transactionId: trxn._id, // Use trxn._id instead of response._id
-      message: `Successfully undone amount ${trxn.transactionValue}`, // Use trxn.transactionValue instead of amount
-      success: true,
-    });
-  } catch (error) {
-    await session.abortTransaction();
-    res.status(502).send({
-      error: `Undo aborted due to ${error.message}, please try again`,
-      success: false,
-    });
-  } finally {
-    session.endSession();
-  }
-}
+//     res.status(200).send({
+//       transactionId: trxn._id, // Use trxn._id instead of response._id
+//       message: `Successfully undone amount ${trxn.transactionValue}`, // Use trxn.transactionValue instead of amount
+//       success: true,
+//     });
+//   } catch (error) {
+//     await session.abortTransaction();
+//     res.status(502).send({
+//       error: `Undo aborted due to ${error.message}, please try again`,
+//       success: false,
+//     });
+//   } finally {
+//     session.endSession();
+//   }
+// }
 
 async function fetchAllTransaction(req, res) {
   const uid = req.params.uid;
@@ -133,4 +133,4 @@ async function fetchAllTransaction(req, res) {
 
 
 
-module.exports = { transferPoints, undoTransaction, fetchAllTransaction };
+module.exports = { transferPoints, fetchAllTransaction };
