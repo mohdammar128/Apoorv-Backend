@@ -14,11 +14,16 @@ const {
   undoTransaction,
   fetchAllTransaction,
 } = require("../controllers/transaction.js");
+
+const {
+  getHomeFeed
+} = require("../controllers/homeFeed.js");
+
 const router = express.Router();
 const { txnMiddleware, isItSameTransaction } = require("../middleware/transactionMiddleware.js");
 
 // HomeFeed Routes
-router.get("/feed", authMiddleware);
+router.get("/feed", authMiddleware, getHomeFeed);
 
 // User route
 router.post("/user", authMiddleware, isUserExistMiddleware, signUp);
