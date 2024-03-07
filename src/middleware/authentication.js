@@ -3,7 +3,9 @@ const admin = require("../config/firebaseCofig.js");
 
 async function authMiddleware(request, response, next) {
   const headerToken = request.headers.authorization;
-
+  const enableAuth = process.env.ENABLE_AUTH;
+  if (enableAuth === 'false')
+    return next();
   try {
     const decodedToken = await admin.auth().verifyIdToken(headerToken);
     console.log(decodedToken.uid)
