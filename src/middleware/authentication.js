@@ -8,7 +8,7 @@ async function authMiddleware(request, response, next) {
     const decodedToken = await admin.auth().verifyIdToken(headerToken);
     console.log(decodedToken.uid)
     if (!decodedToken) {
-      return res.status(401).send({ error: "not_authorized ! signup first", success: false });
+      return res.status(403).send({ error: "not_authorized! signup first", success: false });
     }
     const uid = decodedToken.uid;
     request.body["uid"] = uid;

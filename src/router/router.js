@@ -17,14 +17,16 @@ const {
 const router = express.Router();
 const { txnMiddleware, isItSameTransaction } = require("../middleware/transactionMiddleware.js");
 
-/* User related routes  */
-// authMiddleware, isUserExistMiddleware
-router.post("/user", authMiddleware, isUserExistMiddleware, signUp);
-router.get("/user/:uid", getAllDetailsOfUser);
-router.delete("/user/:uid", deleteUser);
-router.get("/user-list", handleQuery);
+// HomeFeed Routes
+router.get("/feed", authMiddleware);
 
-/* transaction related routes */
+// User route
+router.post("/user", authMiddleware, isUserExistMiddleware, signUp);
+router.get("/user/:uid", authMiddleware, getAllDetailsOfUser);
+router.delete("/user/:uid", authMiddleware, deleteUser);
+router.get("/user-list", authMiddleware, handleQuery);
+
+// Transaction routes
 router.post("/transaction", isItSameTransaction, txnMiddleware, transferPoints);
 // router.delete("/transaction/:tid/undo", undoTransaction);
 router.get("/transaction/:uid", fetchAllTransaction);
