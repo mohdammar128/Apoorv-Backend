@@ -47,9 +47,9 @@ async function getAllDetailsOfUser(req, res) {
 async function deleteUser(req, res) {
   try {
     const uid = req.params.uid;
-    const user = await User.findOneAndUpdate({ uid }, { isActive: false }, { success: true });
+    const user = await User.findOneAndUpdate({ uid, isActive: true }, { isActive: false }, { success: true });
     if (!user) {
-      res.status(404).send({ error: "user_not_found", success: false })
+      return res.status(404).send({ error: "user_not_found", success: false })
 
     }
     res.status(200).send({ userId: user._id, success: true })
