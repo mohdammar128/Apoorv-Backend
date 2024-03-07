@@ -7,14 +7,15 @@ async function authMiddleware(request, response, next) {
   try {
     const decodedToken = await admin.auth().verifyIdToken(headerToken);
     console.log(decodedToken.uid)
-    if (decodedToken) {
-      const uid = decodedToken.uid;
-      request.body["uid"] = uid;
+    if (!decodedToken) {
+      return res.status(401).send({ error: "not_authorized ! signup first", success: false });
     }
+    const uid = decodedToken.uid;
+    request.body["uid"] = uid;
     next();
   } catch (error) {
-    response.status(401)
-      .send({ message: "Please signUp first", error: error.message });
+    response.status(500)
+      .send({ error: "something_went_wrong_please_try_again", success: false });
   }
 }
 
@@ -25,11 +26,11 @@ async function isUserExistMiddleware(req, res, next) {
     const user = await User.findOne({ uid, isActive: true });
     if (user) {
       console.log("userId:", user._id);
-      return res.status(200).send({ message: "User already exist", success: true, userId: user._id })
+      return res.status(409).send({ error: "User already exist", success: true, userId: user._id })
     }
     next();
   } catch (error) {
-    res.send(400).send({ message: `something went wrong ${error.message}`, success: false })
+    res.send(500).send({ error: "something_went_wrong_please_try_again", success: false })
   }
 }
 

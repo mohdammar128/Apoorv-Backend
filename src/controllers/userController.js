@@ -2,19 +2,19 @@ const User = require("../model/User");
 
 async function signUp(req, res) {
   try {
-    const { uid, email, rollNumber, role, fullName, fromCollege, collegeName } = req.body;
-    if (!uid || !email || !rollNumber || !role || !fullName) {
-      return res.status(400).send({ message: "Please_provide_required_field", success: false });
+    const { uid, email, rollNumber, role, fullName, fromCollege, collegeName, phone } = req.body;
+    if (!uid || !email || !collegeName || !role || !fullName || !phone) {
+      return res.status(400).send({ error: "please_provide_required_field", success: false });
     }
 
     const newUser = new User({
-      uid, email, rollNumber, role, fullName, fromCollege, collegeName
+      uid, email, rollNumber, role, fullName, fromCollege, collegeName, phone
     });
     const response = await newUser.save();
     console.log(response._id);
     res.status(201).send({ userId: response._id, message: "Successfully_created", success: true });
   } catch (error) {
-    return res.status(400).send({ error: `Something_went_wrong: ${error.message}`, success: false });
+    return res.status(500).send({ error: "something_went_wrong_please_try_again", success: false });
   }
 }
 
@@ -24,7 +24,7 @@ async function getAllDetailsOfUser(req, res) {
   try {
     const uid = req.params.uid;
     console.log("insidegetAllDetails");
-    let userDetails = await User.findOne({ uid }).exec();
+    let userDetails = await User.findOne({ uid, isActive: true }).exec();
     if (!userDetails) {
       return res.status(404).send({ error: "user_not_found", success: false });
     }
@@ -32,15 +32,18 @@ async function getAllDetailsOfUser(req, res) {
     res.status(200).send({
       user: {
         uid: userDetails.uid,
+        role: userDetails.role,
         fullName: userDetails.fullName,
         rollNumber: userDetails.rollNumber,
         fromCollege: userDetails.fromCollege,
         email: userDetails.email,
-        points: userDetails.points
+        points: userDetails.points,
+        phone: userDetails.phone,
+        collegeName: userDetails.collegeName
       }, success: true
     });
   } catch (error) {
-    res.status(502).send({ erorr: `Something_went_wrong: ${error.message}`, success: false });
+    res.status(500).send({ error: "something_went_wrong_please_try_again", success: false });
   }
 }
 
@@ -55,7 +58,7 @@ async function deleteUser(req, res) {
     res.status(200).send({ userId: user._id, success: true })
 
   } catch (error) {
-    res.status(502).send({ error: "Something_went_wrong ! Please_try_again", success: false })
+    res.status(500).send({ error: "something_went_wrong_please_try_again", success: false })
 
   }
 }
@@ -86,7 +89,7 @@ async function handleQuery(req, res) {
   if (num) {
 
     if (isNaN(num) || num <= 0) {
-      return res.status(400).send({ error: 'Invalid limit value' });
+      return res.status(400).send({ error: 'Invalid limit value', success: false });
     }
     aggregationPipeline.push({ $limit: num });
   }
@@ -102,7 +105,7 @@ async function handleQuery(req, res) {
     res.status(200).send({ results, success: true });
   } catch (error) {
 
-    res.status(502).send({ error: 'Internal_server_error', success: false }); // Handle errors appropriately
+    res.status(500).send({ error: "something_went_wrong_please_try_again", success: false }); // Handle errors appropriately
   }
 }
 

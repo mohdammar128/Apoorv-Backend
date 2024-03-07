@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema(
     },
     collegeName: {
       type: String
+    },
+    phone: {
+      type: String,
+      required: true
     }
 
   },
