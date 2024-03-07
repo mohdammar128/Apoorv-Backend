@@ -5,9 +5,10 @@ const Transaction = require("../model/Transaction");
 async function transferPoints(req, res) {
   const { transactionType, from, to, amount } = req.body;
   const session = await mongoose.startSession();
-  session.startTransaction();
+
 
   try {
+    
     await User.updateOne(
       { uid: to },
       { $inc: { points: amount } },
@@ -36,7 +37,7 @@ async function transferPoints(req, res) {
   } catch (error) {
     await session.abortTransaction();
     res.status(502).send({
-      error: `Transaction aborted due to ${error.message}`,
+      error: `Transaction aborted due to ${error}`,
       success: false,
     });
   } finally {
