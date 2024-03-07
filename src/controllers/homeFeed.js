@@ -1,4 +1,4 @@
-const HomeFeedModel = require("../model/HomeFeed");
+const HomeFeed = require("../model/HomeFeed");
 
 async function getHomeFeed(req, res) {
   try {
@@ -27,7 +27,7 @@ async function getHomeFeed(req, res) {
       aggregationPipeline.push({ $limit: limit });
     }
 
-    const homeFeedRes = await HomeFeedModel.aggregate(aggregationPipeline);
+    const homeFeedRes = await HomeFeed.aggregate(aggregationPipeline);
 
     if (homeFeedRes)
       res.status(200).send({
@@ -47,8 +47,6 @@ async function getHomeFeed(req, res) {
       error: `Error in fetching Home Feed`,
       success: false,
     });
-  } finally {
-    session.endSession();
   }
 }
 

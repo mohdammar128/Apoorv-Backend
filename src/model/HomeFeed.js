@@ -15,4 +15,5 @@ const homeFeedSchema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model("homefeed", homeFeedSchema);
+const HomeFeed = mongoose.model("homefeed", homeFeedSchema);
+module.exports = HomeFeed;
