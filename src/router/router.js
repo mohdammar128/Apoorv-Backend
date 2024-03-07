@@ -16,7 +16,8 @@ const {
 } = require("../controllers/transaction.js");
 
 const {
-  getHomeFeed
+  getHomeFeed,
+  insertHomeFeed
 } = require("../controllers/homeFeed.js");
 
 const router = express.Router();
@@ -24,6 +25,7 @@ const { txnMiddleware, isItSameTransaction } = require("../middleware/transactio
 
 // HomeFeed Routes
 router.get("/feed", authMiddleware, getHomeFeed);
+router.post("/feed", insertHomeFeed);
 
 // User route
 router.post("/user", authMiddleware, isUserExistMiddleware, signUp);

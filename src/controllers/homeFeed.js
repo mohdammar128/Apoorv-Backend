@@ -2,8 +2,8 @@ const HomeFeed = require("../model/HomeFeed");
 
 async function getHomeFeed(req, res) {
   try {
-    const skip = req.params.skip || 0;
-    const limit = req.query.limit;
+    const skip = parseInt(req.query.skip);
+    const limit = parseInt(req.query.limit);
 
     const matchQuery = {
       is_active: true
@@ -14,15 +14,15 @@ async function getHomeFeed(req, res) {
         $match: matchQuery
       },
       {
-        $skip: skip
-      },
-      {
         $sort: {
           createdAt: -1
         }
       }
     ]
-
+    
+    if (skip) {
+      aggregationPipeline.push({ $skip: skip });
+    }
     if (limit) {
       aggregationPipeline.push({ $limit: limit });
     }
@@ -42,12 +42,49 @@ async function getHomeFeed(req, res) {
         success: false,
       })
   } catch (error) {
-    await session.abortTransaction();
     res.status(502).send({
       error: `Error in fetching Home Feed`,
       success: false,
+      message: error.message
     });
   }
 }
 
-module.exports = { getHomeFeed };
+async function insertHomeFeed(req, res) {
+  try {
+    const feedInfo = req.body.feeds;
+    
+    if (!Array.isArray(feedInfo))
+      return res.status(404).send({
+        error: `Wrong Feed info format, 'feeds' should be an array of objects`,
+        success: false,
+      });
+    
+    let insertRes; 
+    try {
+      insertRes = await HomeFeed.insertMany(feedInfo);
+    } catch (error) {
+      return res.status(400).send({
+        error: `Error inserting Fields, Check input data`,
+        success: false,
+        message: error.message
+      });
+    }
+    res.status(200).send({
+      body: {
+        insertRes
+      },
+      success: true,
+      message: `${insertRes.length} documents inserted out of ${feedInfo.length}`
+    });
+    
+  } catch (error) {
+    res.status(500).send({
+      error: `Internal Server Error`,
+      success: false,
+      message: error.message
+    });
+  }
+}
+
+module.exports = { getHomeFeed, insertHomeFeed };
