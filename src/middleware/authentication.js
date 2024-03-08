@@ -3,9 +3,11 @@ const admin = require("../config/firebaseCofig.js");
 
 async function authMiddleware(request, response, next) {
   const headerToken = request.headers.authorization;
-  const enableAuth = process.env.ENABLE_AUTH;
-  if (enableAuth === 'false')
-    return next();
+
+  
+  // const enableAuth = process.env.ENABLE_AUTH;
+  // if (enableAuth === 'false')
+  //   return next();
   try {
     const decodedToken = await admin.auth().verifyIdToken(headerToken);
     console.log(decodedToken.uid)
@@ -17,7 +19,7 @@ async function authMiddleware(request, response, next) {
     next();
   } catch (error) {
     response.status(500)
-      .send({ error: "something_went_wrong_please_try_again", success: false });
+      .send({ error: "Error occurs while verifying please try again", success: false });
   }
 }
 
@@ -32,7 +34,7 @@ async function isUserExistMiddleware(req, res, next) {
     }
     next();
   } catch (error) {
-    res.send(500).send({ error: "something_went_wrong_please_try_again", success: false })
+    res.send(500).send({ error: "User validation failed ,please try again", success: false })
   }
 }
 

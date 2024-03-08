@@ -5,20 +5,23 @@ const Transaction = require("../model/Transaction");
 async function transferPoints(req, res) {
   const { transactionType, from, to, amount } = req.body;
   const session = await mongoose.startSession();
-  session.startTransaction();
+
 
   try {
-    await User.updateOne(
-      { uid: to },
-      { $inc: { points: amount } },
-      { session, new: true }
-    ); // Lock and update
 
+
+   
     await User.updateOne(
       { uid: from },
       { $inc: { points: -amount } },
       { session, new: true }
     );
+    await User.updateOne(
+      { uid: to },
+      { $inc: { points: amount } },
+      { session, new: true }
+
+    ); // Lock and update
     const newTrxn = new Transaction({
       transactionType,
       from: from,
@@ -35,8 +38,9 @@ async function transferPoints(req, res) {
     });
   } catch (error) {
     await session.abortTransaction();
-    res.status(502).send({
-      error: `Transaction aborted due to ${error.message}`,
+
+    res.status(402).send({
+      error: `Transaction aborted ! please try again`,
       success: false,
     });
   } finally {
@@ -44,53 +48,7 @@ async function transferPoints(req, res) {
   }
 }
 
-// async function undoTransaction(req, res) {
-//   const tid = req.params.tid;
-//   const session = await mongoose.startSession();
-//   console.log("undo is called");
 
-//   try {
-//     const trxn = await Transaction.findOne({ _id: tid });
-
-//     if (!trxn) {
-//       return res.status(404).send({ error: "Transaction does not exist", success: false });
-//     }
-
-//     console.log(trxn);
-
-//     session.startTransaction();
-//     await User.updateOne(
-//       { uid: trxn.from },
-//       { $inc: { points: trxn.transactionValue } },
-//       { session, new: true }
-//     );
-
-//     await User.updateOne(
-//       { uid: trxn.to },
-//       { $inc: { points: -trxn.transactionValue } },
-//       { session, new: true }
-//     );
-
-
-//     await Transaction.deleteOne({ _id: tid }, { session });
-
-//     await session.commitTransaction();
-
-//     res.status(200).send({
-//       transactionId: trxn._id, // Use trxn._id instead of response._id
-//       message: `Successfully undone amount ${trxn.transactionValue}`, // Use trxn.transactionValue instead of amount
-//       success: true,
-//     });
-//   } catch (error) {
-//     await session.abortTransaction();
-//     res.status(502).send({
-//       error: `Undo aborted due to ${error.message}, please try again`,
-//       success: false,
-//     });
-//   } finally {
-//     session.endSession();
-//   }
-// }
 
 async function fetchAllTransaction(req, res) {
   const uid = req.params.uid;
@@ -127,7 +85,7 @@ async function fetchAllTransaction(req, res) {
     res.status(200).send({ transactions, success: true });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: "Internal server error", success: false });
+    res.status(500).send({ error: "Internal server error ,try again", success: false });
   }
 }
 

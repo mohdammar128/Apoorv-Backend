@@ -14,7 +14,7 @@ async function signUp(req, res) {
     console.log(response._id);
     res.status(201).send({ userId: response._id, message: "Successfully_created", success: true });
   } catch (error) {
-    return res.status(500).send({ error: "something_went_wrong_please_try_again", success: false });
+    return res.status(500).send({ error: "error occured while signing please try again", success: false });
   }
 }
 
@@ -43,7 +43,7 @@ async function getAllDetailsOfUser(req, res) {
       }, success: true
     });
   } catch (error) {
-    res.status(500).send({ error: "something_went_wrong_please_try_again", success: false });
+    res.status(500).send({ error: "Error while fecthing details ,please try again", success: false });
   }
 }
 
@@ -58,7 +58,7 @@ async function deleteUser(req, res) {
     res.status(200).send({ userId: user._id, success: true })
 
   } catch (error) {
-    res.status(500).send({ error: "something_went_wrong_please_try_again", success: false })
+    res.status(500).send({ error: "could not able to delete ,try again", success: false })
 
   }
 }
@@ -105,7 +105,7 @@ async function handleQuery(req, res) {
     res.status(200).send({ results, success: true });
   } catch (error) {
 
-    res.status(500).send({ error: "something_went_wrong_please_try_again", success: false }); // Handle errors appropriately
+    res.status(500).send({ error: "Error while resolving query try again", success: false }); // Handle errors appropriately
   }
 }
 

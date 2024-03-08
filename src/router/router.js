@@ -36,5 +36,5 @@ router.get("/user-list", authMiddleware, handleQuery);
 // Transaction routes
 router.post("/transaction", isItSameTransaction, txnMiddleware, transferPoints);
 // router.delete("/transaction/:tid/undo", undoTransaction);
-router.get("/transaction/:uid", fetchAllTransaction);
+router.get("/transaction/:uid",authMiddleware, fetchAllTransaction);
 module.exports = router;

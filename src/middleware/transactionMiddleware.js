@@ -20,13 +20,13 @@ async function isItSameTransaction(req, res, next) {
     res.status(432).send({ cautious: "Do you want to repeat Transaction", sucess: true })
 
   } catch (error) {
-    res.status(502).send({ error: "something went wrong", success: false });
+    res.status(500).send({ error: "Failed to validate duplication !please try again", success: false });
   }
 
 }
 
 async function txnMiddleware(req, res, next) {
-  console.log(" txnMiddleware is called")
+  // console.log(" txnMiddleware is called")
   try {
     const { from, to, amount } = req.body;
     const fromUser = await User.findOne({ uid: from });
@@ -35,12 +35,12 @@ async function txnMiddleware(req, res, next) {
     }
     const toUser = await User.findOne({ uid: to });
     if (!toUser) {
-      return res.status(400).send({ error: "User not found", success: false });
+      return res.status(404).send({ error: "User not found", success: false });
     }
-
+    
     next();
   } catch (error) {
-    res.status(404).send({ error: "something went wrong", success: false })
+    res.status(500).send({ error: "Failed to validate transaction is possible ! please try again", success: false })
   }
 }
 
