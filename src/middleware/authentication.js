@@ -3,7 +3,7 @@ const admin = require("../config/firebaseCofig.js");
 
 async function authMiddleware(request, response, next) {
   const headerToken = request.headers.authorization;
-
+  console.log("asdasnfnlkn")
   
   // const enableAuth = process.env.ENABLE_AUTH;
   // if (enableAuth === 'false')
@@ -18,8 +18,9 @@ async function authMiddleware(request, response, next) {
     request.body["uid"] = uid;
     next();
   } catch (error) {
+    // console.log(error.message)
     response.status(500)
-      .send({ error: "Error occurs while verifying please try again", success: false });
+      .send({ error: "Token expired", success: false });
   }
 }
 
