@@ -15,6 +15,10 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    to_name:{
+      type:String,
+      required:true
+    },
     transactionValue: {
       type: Number,
       required: true,
