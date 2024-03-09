@@ -3,15 +3,10 @@ const User = require("../model/User");
 const Transaction = require("../model/Transaction");
 
 async function transferPoints(req, res) {
-  const { transactionType, from, to, amount } = req.body;
+  const { transactionType, from, to, amount ,toName} = req.body;
   const session = await mongoose.startSession();
-  
-  session.startTransaction();
-
-  try {
-
-
-   
+  try { 
+    session.startTransaction();
     await User.updateOne(
       { uid: from },
       { $inc: { points: -amount } },
@@ -28,6 +23,7 @@ async function transferPoints(req, res) {
       from: from,
       to: to,
       transactionValue: amount,
+      toName
     });
 
     const response = await newTrxn.save({ session });

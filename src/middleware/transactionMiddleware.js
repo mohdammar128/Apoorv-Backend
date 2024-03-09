@@ -30,6 +30,7 @@ async function txnMiddleware(req, res, next) {
   try {
     const { from, to, amount } = req.body;
     const fromUser = await User.findOne({ uid: from });
+   
     if (fromUser.points < amount) {
       return res.status(502).send({ error: "You have not Sufficient Points", success: false });
     }
@@ -37,6 +38,7 @@ async function txnMiddleware(req, res, next) {
     if (!toUser) {
       return res.status(404).send({ error: "User not found", success: false });
     }
+    req.body["toName"]=toUser.fullName;
     
     next();
   } catch (error) {
