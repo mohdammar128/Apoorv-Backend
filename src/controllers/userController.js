@@ -2,13 +2,13 @@ const User = require("../model/User");
 
 async function signUp(req, res) {
   try {
-    const { uid, email, rollNumber, role, fullName, fromCollege, collegeName, phone } = req.body;
+    const { uid, email, rollNumber, role, fullName, fromCollege, collegeName, phone ,profileImage} = req.body;
     if (!uid || !email || !collegeName || !role || !fullName || !phone) {
       return res.status(400).send({ error: "please_provide_required_field", success: false });
     }
 
     const newUser = new User({
-      uid, email, rollNumber, role, fullName, fromCollege, collegeName, phone
+      uid, email, rollNumber, role, fullName, fromCollege, collegeName, phone,profileImage
     });
     const response = await newUser.save();
     console.log(response._id);
@@ -39,7 +39,8 @@ async function getAllDetailsOfUser(req, res) {
         email: userDetails.email,
         points: userDetails.points,
         phone: userDetails.phone,
-        collegeName: userDetails.collegeName
+        collegeName: userDetails.collegeName,
+        photoUrl:userDetails.profileImage
       }, success: true
     });
   } catch (error) {

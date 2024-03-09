@@ -10,12 +10,13 @@ async function authMiddleware(request, response, next) {
   //   return next();
   try {
     const decodedToken = await admin.auth().verifyIdToken(headerToken);
-    console.log(decodedToken.uid)
+    console.log(decodedToken)
     if (!decodedToken) {
       return res.status(403).send({ error: "not_authorized! signup first", success: false });
     }
     const uid = decodedToken.uid;
     request.body["uid"] = uid;
+    request.body["profileImage"]=decodedToken?.photoUrl;
     next();
   } catch (error) {
     // console.log(error.message)

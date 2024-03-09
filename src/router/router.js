@@ -30,7 +30,7 @@ router.post("/feed", insertHomeFeed);
 // User route
 router.post("/user", authMiddleware, isUserExistMiddleware, signUp);
 router.get("/user/:uid", authMiddleware, getAllDetailsOfUser);
-router.delete("/user/:uid", authMiddleware, deleteUser);
+router.delete("/user/:uid",authMiddleware,deleteUser);
 router.get("/user-list", authMiddleware, handleQuery);
 
 // Transaction routes
