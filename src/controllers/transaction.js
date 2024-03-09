@@ -5,7 +5,8 @@ const Transaction = require("../model/Transaction");
 async function transferPoints(req, res) {
   const { transactionType, from, to, amount } = req.body;
   const session = await mongoose.startSession();
-
+  
+  session.startTransaction();
 
   try {
 
