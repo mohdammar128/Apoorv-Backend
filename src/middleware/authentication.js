@@ -16,7 +16,7 @@ async function authMiddleware(request, response, next) {
     }
     const uid = decodedToken.uid;
     request.body["uid"] = uid;
-    request.body["profileImage"]=decodedToken?.photoUrl;
+    request.body["profileImage"]=decodedToken?.picture;
     next();
   } catch (error) {
     // console.log(error.message)
