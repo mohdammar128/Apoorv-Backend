@@ -11,11 +11,12 @@ async function isItSameTransaction(req, res, next) {
       console.log("move to next funtion")
       return next();
     }
-    const response = await Transaction.findOne({ transactionType, from: from, to: to, transactionValue: amount, }).sort({ createdAt: -1 });
-    console.log(response)
-    if (!response) {
+    const response = await Transaction.findOne({ transactionType, from: from, to: to }).sort({ createdAt: -1 });
+    // console.log(response.transactionValue,amount)
+    if (response.transactionValue !== amount) {
       return next();
     }
+  
 
     res.status(432).send({ cautious: "Do you want to repeat Transaction", sucess: true })
 
@@ -30,7 +31,7 @@ async function txnMiddleware(req, res, next) {
   try {
     const { from, to, amount } = req.body;
     const fromUser = await User.findOne({ uid: from });
-   
+
     if (fromUser.points < amount) {
       return res.status(502).send({ error: "You have not Sufficient Points", success: false });
     }
@@ -38,8 +39,8 @@ async function txnMiddleware(req, res, next) {
     if (!toUser) {
       return res.status(404).send({ error: "User not found", success: false });
     }
-    req.body["toName"]=toUser.fullName;
-    
+    req.body["toName"] = toUser.fullName;
+
     next();
   } catch (error) {
     res.status(500).send({ error: "Failed to validate transaction is possible ! please try again", success: false })
