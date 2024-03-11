@@ -8,10 +8,10 @@ const homeFeedSchema = new mongoose.Schema({
     text: {
       type: String,
     },
-    image_url: {
+    imageUrl: {
       type: String,
     },
-    is_active: {
+    isActive: {
       type: Boolean,
       default: true
     }

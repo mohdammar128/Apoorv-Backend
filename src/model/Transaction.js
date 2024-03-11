@@ -15,7 +15,7 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    to_name:{
+    toName:{
       type:String,
       required:true
     },
