@@ -23,7 +23,8 @@ async function transferPoints(req, res) {
       from: from,
       to: to,
       transactionValue: amount,
-      toName
+      toName,
+      fromName
     });
 
     const response = await newTrxn.save({ session });

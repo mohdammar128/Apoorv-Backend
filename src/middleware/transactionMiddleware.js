@@ -40,6 +40,7 @@ async function txnMiddleware(req, res, next) {
       return res.status(404).send({ error: "User not found", success: false });
     }
     req.body["toName"] = toUser.fullName;
+   req.body["fromName"]=fromUser.fullName;
 
     next();
   } catch (error) {
