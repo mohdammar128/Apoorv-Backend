@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
     // while signUp we will assign value to cuurentPoints based on the user(if user is client then we will set it zero and if its is shopkeeper then we will set the maximum limit )
     points: {
       type: Number,
-      default: 0,
+      default: 50,
 
     },
 
