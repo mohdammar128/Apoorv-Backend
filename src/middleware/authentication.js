@@ -42,9 +42,9 @@ async function isUserExistMiddleware(req, res, next) {
 }
 
 async function isShopAuthorized(req, res, next) {
-  const { uid, password } = req.body;
+  const { from, password } = req.body;
   try {
-    const shopKeeper = await findOne({ uid });
+    const shopKeeper = await User.findOne({ uid: from });
     if (
       shopKeeper &&
       (shopKeeper.password !== password || shopKeeper.email !== email)
