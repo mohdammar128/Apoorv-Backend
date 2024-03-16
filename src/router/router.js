@@ -38,7 +38,8 @@ router.delete("/user/:uid", authMiddleware, deleteUser);
 router.get("/user-list", authMiddleware, handleQuery);
 
 // Shopkeeper routes
-router.post("/shop", authMiddleware, isUserExistMiddleware, shopSignUp);
+// router.post("/shop", authMiddleware, isUserExistMiddleware, shopSignUp);
+router.post("/shop", isUserExistMiddleware, shopSignUp);
 router.get("/shops", getAllShops);
 router.put("/shop/password", updateShopPassword);
 router.get("/shop/:uid", authMiddleware, isShopAuthorized, getAllDetailsOfUser);
