@@ -187,7 +187,7 @@ async function updateShopPassword(req, res) {
   const update = { $set: { password: newPassword } };
   const option = { new: true };
   try {
-    const updatedShop = User.findOneAndUpdate(filter, update, option);
+    const updatedShop = await User.findOneAndUpdate(filter, update, option);
     if (!updatedShop) {
       return res
         .status(404)
