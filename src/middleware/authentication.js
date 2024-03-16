@@ -42,25 +42,30 @@ async function isUserExistMiddleware(req, res, next) {
 }
 
 async function isShopAuthorized(req, res, next) {
-  const { from, password } = req.body;
+  const { from, password, email } = req.body; // assuming 'email' is also coming from the request body
   try {
     const shopKeeper = await User.findOne({ uid: from });
     if (
-      shopKeeper &&
-      (shopKeeper.password !== password || shopKeeper.email !== email)
+      !shopKeeper ||
+      shopKeeper.password !== password ||
+      shopKeeper.email !== email
     ) {
       return res.status(400).send({
-        error: "you are not authorized shopkeeper,please check your details",
+        error:
+          "You are not an authorized shopkeeper. Please check your details.",
         success: false,
       });
     }
     console.log(shopKeeper);
-
     next();
   } catch (error) {
+    console.error(error);
     res
       .status(500)
-      .send({ error: "Authorization has failed ,try again ", success: false });
+      .send({
+        error: "Authorization has failed. Please try again.",
+        success: false,
+      });
   }
 }
 
