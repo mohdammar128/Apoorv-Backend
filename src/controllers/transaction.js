@@ -3,7 +3,7 @@ const User = require("../model/User");
 const Transaction = require("../model/Transaction");
 
 async function transferPoints(req, res) {
-  const { transactionType, from, to, amount ,toName} = req.body;
+  const { transactionType, from, to, amount ,toName,fromName} = req.body;
   const session = await mongoose.startSession();
   try { 
     session.startTransaction();
