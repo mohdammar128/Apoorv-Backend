@@ -12,13 +12,11 @@ const userSchema = new mongoose.Schema(
     },
     rollNumber: {
       type: String,
-
     },
     role: {
       type: String,
       enum: ["shop", "user"],
       default: "user",
-
     },
     fullName: {
       type: String,
@@ -28,32 +26,31 @@ const userSchema = new mongoose.Schema(
     points: {
       type: Number,
       default: 50,
-
     },
 
     isActive: {
       type: Boolean,
-      default: true
+      default: true,
     },
 
     fromCollege: {
       type: Boolean,
-      required: true
     },
     collegeName: {
-      type: String
+      type: String,
     },
     phone: {
       type: String,
-      required: true
     },
     profileImage: {
-      type: String
+      type: String,
     },
     password: {
-      type: String
-    }
-
+      type: String,
+    },
+    pointsArray: {
+      type: [Number],
+    },
   },
   {
     timestamps: true,
@@ -62,7 +59,7 @@ const userSchema = new mongoose.Schema(
 
 // Before saving, checks whether the point is negative or not
 
-userSchema.pre('save', function (next) {
+userSchema.pre("save", function (next) {
   if (this.points < 0) {
     const error = new Error("You have entered invalid points");
     return next(error);
