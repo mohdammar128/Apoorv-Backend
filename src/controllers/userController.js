@@ -147,8 +147,8 @@ async function handleQuery(req, res) {
 }
 
 async function shopSignUp(req, res) {
-  const { uid, email, role, fullName, points, password, pointsArray } =
-    req.body;
+  // const { uid, email, role, fullName, points, password, pointsArray } =
+  //   req.body;
   const shops = req.body.shops;
 
   try {
