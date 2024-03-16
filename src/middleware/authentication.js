@@ -54,11 +54,13 @@ async function isShopAuthorized(req, res, next) {
         success: false,
       });
     }
+    console.log(shopKeeper);
+
     next();
   } catch (error) {
     res
       .status(500)
-      .send({ error: "Authorization has failed ,try again", success: false });
+      .send({ error: "Authorization has failed ,try again ", success: false });
   }
 }
 
