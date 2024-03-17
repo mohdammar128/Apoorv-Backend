@@ -38,7 +38,7 @@ async function transferPoints(req, res) {
     await session.abortTransaction();
 
     res.status(402).send({
-      error: `Transaction aborted ! please try again`,
+      error: `Transaction aborted! Please try again.`,
       success: false,
     });
   } finally {
@@ -53,7 +53,7 @@ async function fetchAllTransaction(req, res) {
 
   // Input validation (optional but recommended):
   if (!uid) {
-    return res.status(400).send({ error: "Bad request: Missing user ID", success: false });
+    return res.status(400).send({ error: "Authorization Error: Please refresh the page and try again.", success: false });
   }
 
   const pipeline = [
@@ -77,13 +77,13 @@ async function fetchAllTransaction(req, res) {
 
     // Handle empty response gracefully
     if (!transactions.length) {
-      return res.status(204).send({ message: "No transactions found for this user", success: true });
+      return res.status(204).send({ message: "Hey there! Looks like no transactions have happened yet. Why not try sending points to someone or better yet, receive some from a friend? ;)", success: true });
     }
 
     res.status(200).send({ transactions, success: true });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: "Internal server error ,try again", success: false });
+    res.status(500).send({ error: "Error fetching transactions. Please try again.", success: false });
   }
 }
 
