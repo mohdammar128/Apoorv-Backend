@@ -23,8 +23,8 @@ const { getHomeFeed, insertHomeFeed } = require("../controllers/homeFeed.js");
 
 const router = express.Router();
 const {
-  txnMiddleware,
-  isItSameTransaction,
+  transactionMiddleware,
+  checkIfRepeatedTransaction,
 } = require("../middleware/transactionMiddleware.js");
 
 // HomeFeed Routes
@@ -46,13 +46,13 @@ router.get("/shop/:uid", authMiddleware, isShopAuthorized, getAllDetailsOfUser);
 router.post(
   "/shop/transaction",
   isShopAuthorized,
-  txnMiddleware,
+  transactionMiddleware,
   transferPoints
 );
 
 // Transaction routes
-//router.post("/transaction", isItSameTransaction, txnMiddleware, transferPoints);
-router.post("/transaction", txnMiddleware, transferPoints);
+//router.post("/transaction", checkIfRepeatedTransaction, transactionMiddleware, transferPoints);
+router.post("/transaction", transactionMiddleware, transferPoints);
 
 // router.delete("/transaction/:tid/undo", undoTransaction);
 router.get("/transaction/:uid", authMiddleware, fetchAllTransaction);
