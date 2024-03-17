@@ -16,7 +16,7 @@ async function signUp(req, res) {
     if (!uid || !email || !collegeName || !role || !fullName || !phone) {
       return res
         .status(400)
-        .send({ error: "please_provide_required_field", success: false });
+        .send({ error: "Some of the required fields are missing. Please fill them in and try again", success: false });
     }
 
     const newUser = new User({
@@ -34,12 +34,12 @@ async function signUp(req, res) {
     console.log(response._id);
     res.status(201).send({
       userId: response._id,
-      message: "Successfully_created",
+      message: "Your Account has been Successfully created!",
       success: true,
     });
   } catch (error) {
     return res.status(500).send({
-      error: "error occured while signing please try again",
+      error: "Error while creating user, please try again!",
       success: false,
     });
   }
@@ -48,10 +48,9 @@ async function signUp(req, res) {
 async function getAllDetailsOfUser(req, res) {
   try {
     const uid = req.params.uid;
-    console.log("insidegetAllDetails");
     let userDetails = await User.findOne({ uid, isActive: true }).exec();
     if (!userDetails) {
-      return res.status(404).send({ error: "user_not_found", success: false });
+      return res.status(404).send({ error: "User details not found. Please refresh the page and try again.", success: false });
     }
 
     res.status(200).send({
@@ -71,7 +70,7 @@ async function getAllDetailsOfUser(req, res) {
     });
   } catch (error) {
     res.status(500).send({
-      error: "Error while fecthing details ,please try again",
+      error: "Error while fetching details, please try again.",
       success: false,
     });
   }
@@ -86,18 +85,17 @@ async function deleteUser(req, res) {
       { success: true }
     );
     if (!user) {
-      return res.status(404).send({ error: "user_not_found", success: false });
+      return res.status(404).send({ error: "User details not found. Please refresh the page and try again.", success: false });
     }
     res.status(200).send({ userId: user._id, success: true });
   } catch (error) {
     res
       .status(500)
-      .send({ error: "could not able to delete ,try again", success: false });
+      .send({ error: "Error while Deleting the User, please try again.", success: false });
   }
 }
 
 async function handleQuery(req, res) {
-  console.log("inside handleQuery");
   const searchKey = req.query["search-key"];
   const num = req.query.num ? parseInt(req.query.num) : null;
   const sortField = req.query.sort;
@@ -121,7 +119,7 @@ async function handleQuery(req, res) {
     if (isNaN(num) || num <= 0) {
       return res
         .status(400)
-        .send({ error: "Invalid limit value", success: false });
+        .send({ error: "Please provide a valid positive number.", success: false });
     }
     aggregationPipeline.push({ $limit: num });
   }
@@ -142,7 +140,7 @@ async function handleQuery(req, res) {
   } catch (error) {
     res
       .status(500)
-      .send({ error: "Error while resolving query try again", success: false }); // Handle errors appropriately
+      .send({ error: "Error fetching data, please try again.", success: false }); // Handle errors appropriately
   }
 }
 
@@ -155,7 +153,7 @@ async function shopSignUp(req, res) {
     if (!Array.isArray(shops)) {
       return res.status(404).send({
         error:
-          "Wrong format ,We need array of shops with given details uid,email,fullName,points,passwrod,pointsArray",
+          "Incorrect feed information format. 'shops' should be an array of objects.",
       });
     }
 
@@ -164,7 +162,7 @@ async function shopSignUp(req, res) {
   } catch (error) {
     res
       .status(500)
-      .send({ error: "Error while inserting,try again ", success: false });
+      .send({ error: "Error in inserting shop data, please check the data format and try again.", success: false });
   }
 }
 
@@ -172,11 +170,11 @@ async function getAllShops(req, res) {
   try {
     const shops = await find({ role: "shop" });
     if (!shops) {
-      res.status("No shops are found ");
+      res.status("No shops found in the database, please create the shops and try again.");
     }
     res.status(200).send({ shops, success: true });
   } catch (error) {
-    res.status(500).send("Error while fectching ,please try again");
+    res.status(500).send("Error while fectching shop details, please try again.");
   }
 }
 
@@ -191,13 +189,13 @@ async function updateShopPassword(req, res) {
     if (!updatedShop) {
       return res
         .status(404)
-        .send({ error: "no_such_shops_exits", success: false });
+        .send({ error: "No such shop found in the database. Please check your request and try again.", success: false });
     }
 
     res.status(200).send({ updatedShop, success: true });
   } catch (error) {
     res.status(500).send({
-      error: `someting_went_wrong :${error.message} ! try again`,
+      error: `Internal Server Error: ${error.message}`,
       success: false,
     });
   }
