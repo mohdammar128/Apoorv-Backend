@@ -32,17 +32,16 @@ async function getHomeFeed(req, res) {
     if (homeFeedRes)
       res.status(200).send({
         body: homeFeedRes,
-
         success: true,
       });
     else
       res.status(404).send({
-        error: `Homefeed not found`,
+        error: `Could not load Home Feed. Please try again later.`,
         success: false,
       })
   } catch (error) {
     res.status(502).send({
-      error: `Error in fetching Home Feed`,
+      error: `Failed to load the home feed. Please try again later.`,
       success: false,
       message: error.message
     });
@@ -55,7 +54,7 @@ async function insertHomeFeed(req, res) {
 
     if (!Array.isArray(feedInfo))
       return res.status(404).send({
-        error: `Wrong Feed info format, 'feeds' should be an array of objects`,
+        error: `Incorrect feed information format. 'feeds' should be an array of objects.`,
         success: false,
       });
 
@@ -64,7 +63,7 @@ async function insertHomeFeed(req, res) {
       insertRes = await HomeFeed.insertMany(feedInfo);
     } catch (error) {
       return res.status(400).send({
-        error: `Error inserting Fields, Check input data`,
+        error: `Error inserting fields. Please check your input data.`,
         success: false,
         message: error.message
       });
@@ -79,7 +78,7 @@ async function insertHomeFeed(req, res) {
 
   } catch (error) {
     res.status(500).send({
-      error: `Internal Server Error`,
+      error: `Internal Server Error. If the issue persists, please contact the app administrator.`,
       success: false,
       message: error.message
     });
