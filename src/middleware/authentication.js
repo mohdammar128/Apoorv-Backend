@@ -1,7 +1,7 @@
 const User = require("../model/User");
 const admin = require("../config/firebaseCofig.js");
 
-async function authMiddleware(request, response, next) {
+async function checkAuthenticationMiddleware(request, response, next) {
   const headerToken = request.headers.authorization;
   try {
     const decodedToken = await admin.auth().verifyIdToken(headerToken);
@@ -22,7 +22,7 @@ async function authMiddleware(request, response, next) {
   }
 }
 
-async function isUserExistMiddleware(req, res, next) {
+async function checkUserExistenceMiddleware(req, res, next) {
   try {
     const { uid } = req.body;
     const user = await User.findOne({ uid, isActive: true });
@@ -41,7 +41,7 @@ async function isUserExistMiddleware(req, res, next) {
   }
 }
 
-async function isShopAuthorized(req, res, next) {
+async function checkShopAuthorizationMiddleware(req, res, next) {
   const { from, password, email } = req.body; // assuming 'email' is also coming from the request body
   try {
     const shopKeeper = await User.findOne({ uid: from });
@@ -69,4 +69,4 @@ async function isShopAuthorized(req, res, next) {
   }
 }
 
-module.exports = { authMiddleware, isUserExistMiddleware, isShopAuthorized };
+module.exports = { checkAuthenticationMiddleware, checkUserExistenceMiddleware, checkShopAuthorizationMiddleware };

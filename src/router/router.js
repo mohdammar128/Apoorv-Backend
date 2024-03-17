@@ -1,8 +1,8 @@
 const express = require("express");
 const {
-  authMiddleware,
-  isUserExistMiddleware,
-  isShopAuthorized,
+  checkAuthenticationMiddleware,
+  checkUserExistenceMiddleware,
+  checkShopAuthorizationMiddleware,
 } = require("../middleware/authentication.js");
 const {
   signUp,
@@ -28,24 +28,24 @@ const {
 } = require("../middleware/transactionMiddleware.js");
 
 // HomeFeed Routes
-router.get("/feed", authMiddleware, getHomeFeed);
+router.get("/feed", checkAuthenticationMiddleware, getHomeFeed);
 router.post("/feed", insertHomeFeed);
 
 // User route
-router.post("/user", authMiddleware, isUserExistMiddleware, signUp);
-router.get("/user/:uid", authMiddleware, getAllDetailsOfUser);
-router.delete("/user/:uid", authMiddleware, deleteUser);
-router.get("/user-list", authMiddleware, handleQuery);
+router.post("/user", checkAuthenticationMiddleware, checkUserExistenceMiddleware, signUp);
+router.get("/user/:uid", checkAuthenticationMiddleware, getAllDetailsOfUser);
+router.delete("/user/:uid", checkAuthenticationMiddleware, deleteUser);
+router.get("/user-list", checkAuthenticationMiddleware, handleQuery);
 
 // Shopkeeper routes
-// router.post("/shop", authMiddleware, isUserExistMiddleware, shopSignUp);
-router.post("/shop", isUserExistMiddleware, shopSignUp);
+// router.post("/shop", checkAuthenticationMiddleware, checkUserExistenceMiddleware, shopSignUp);
+router.post("/shop", checkUserExistenceMiddleware, shopSignUp);
 router.get("/shops", getAllShops);
 router.put("/shop/password", updateShopPassword);
-router.get("/shop/:uid", authMiddleware, isShopAuthorized, getAllDetailsOfUser);
+router.get("/shop/:uid", checkAuthenticationMiddleware, checkShopAuthorizationMiddleware, getAllDetailsOfUser);
 router.post(
   "/shop/transaction",
-  isShopAuthorized,
+  checkShopAuthorizationMiddleware,
   transactionMiddleware,
   transferPoints
 );
@@ -55,5 +55,5 @@ router.post(
 router.post("/transaction", transactionMiddleware, transferPoints);
 
 // router.delete("/transaction/:tid/undo", undoTransaction);
-router.get("/transaction/:uid", authMiddleware, fetchAllTransaction);
+router.get("/transaction/:uid", checkAuthenticationMiddleware, fetchAllTransaction);
 module.exports = router;
