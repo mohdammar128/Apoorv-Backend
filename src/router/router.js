@@ -6,11 +6,11 @@ const {
 } = require("../middleware/authentication.js");
 const {
   signUp,
-  getAllDetailsOfUser,
+  getUserDetails,
   deleteUser,
-  handleQuery,
+  getUserList,
   shopSignUp,
-  getAllShops,
+  getShopList,
   updateShopPassword,
 } = require("../controllers/userController.js");
 const {
@@ -33,16 +33,16 @@ router.post("/feed", insertHomeFeed);
 
 // User route
 router.post("/user", checkAuthenticationMiddleware, checkUserExistenceMiddleware, signUp);
-router.get("/user/:uid", checkAuthenticationMiddleware, getAllDetailsOfUser);
+router.get("/user/:uid", checkAuthenticationMiddleware, getUserDetails);
 router.delete("/user/:uid", checkAuthenticationMiddleware, deleteUser);
-router.get("/user-list", checkAuthenticationMiddleware, handleQuery);
+router.get("/user-list", checkAuthenticationMiddleware, getUserList);
 
 // Shopkeeper routes
 // router.post("/shop", checkAuthenticationMiddleware, checkUserExistenceMiddleware, shopSignUp);
 router.post("/shop", checkUserExistenceMiddleware, shopSignUp);
-router.get("/shops", getAllShops);
+router.get("/shops", getShopList);
 router.put("/shop/password", updateShopPassword);
-router.get("/shop/:uid", checkAuthenticationMiddleware, checkShopAuthorizationMiddleware, getAllDetailsOfUser);
+router.get("/shop/:uid", checkAuthenticationMiddleware, checkShopAuthorizationMiddleware, getUserDetails);
 router.post(
   "/shop/transaction",
   checkShopAuthorizationMiddleware,

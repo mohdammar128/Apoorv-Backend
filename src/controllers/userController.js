@@ -45,7 +45,7 @@ async function signUp(req, res) {
   }
 }
 
-async function getAllDetailsOfUser(req, res) {
+async function getUserDetails(req, res) {
   try {
     const uid = req.params.uid;
     let userDetails = await User.findOne({ uid, isActive: true }).exec();
@@ -95,7 +95,7 @@ async function deleteUser(req, res) {
   }
 }
 
-async function handleQuery(req, res) {
+async function getUserList(req, res) {
   const searchKey = req.query["search-key"];
   const num = req.query.num ? parseInt(req.query.num) : null;
   const sortField = req.query.sort;
@@ -166,7 +166,7 @@ async function shopSignUp(req, res) {
   }
 }
 
-async function getAllShops(req, res) {
+async function getShopList(req, res) {
   try {
     const shops = await find({ role: "shop" });
     if (!shops) {
@@ -203,10 +203,10 @@ async function updateShopPassword(req, res) {
 
 module.exports = {
   signUp,
-  getAllDetailsOfUser,
+  getUserDetails,
   deleteUser,
-  handleQuery,
-  getAllShops,
+  getUserList,
+  getShopList,
   shopSignUp,
   updateShopPassword
 };
