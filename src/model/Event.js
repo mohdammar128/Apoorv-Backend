@@ -28,11 +28,11 @@ const eventSchema = new mongoose.Schema(
   }
 );
 
+// Pre save hook to check if the start time is less than the end time
 eventSchema.pre('save', async function (next) {
   if (this.startTime >= this.endTime) {
     return next(new Error("Start time of the event should be less than the end time."));
   }
-
   next();
 });
 

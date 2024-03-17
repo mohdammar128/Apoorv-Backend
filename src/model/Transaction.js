@@ -5,7 +5,7 @@ const transactionSchema = new mongoose.Schema(
     transactionType: {
       type: String,
       enum: ["shop", "user"],
-      required: true, // Corrected typo: 'required' instead of 'require'
+      required: true,
     },
     from: {
       type: String,

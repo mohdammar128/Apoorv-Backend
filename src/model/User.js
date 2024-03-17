@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // while signUp we will assign value to cuurentPoints based on the user(if user is client then we will set it zero and if its is shopkeeper then we will set the maximum limit )
     points: {
       type: Number,
       default: 50,
@@ -57,8 +56,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Before saving, checks whether the point is negative or not
-
+// Pre save hook to check if the points are valid
 userSchema.pre("save", function (next) {
   if (this.points < 0) {
     const error = new Error("You have entered invalid points");
