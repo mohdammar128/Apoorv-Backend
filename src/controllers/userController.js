@@ -96,6 +96,7 @@ async function deleteUser(req, res) {
 }
 
 async function getUserList(req, res) {
+  const currentUserId = req.body.uid;
   const searchKey = req.query["search-key"];
   const num = req.query.num ? parseInt(req.query.num) : null;
   const sortField = req.query.sort;
@@ -112,10 +113,11 @@ async function getUserList(req, res) {
   })
 
   if (searchKey) {
+
     aggregationPipeline.push({
       $match: {
+        $and: [{ fullName: new RegExp(searchKey, "i") }, { uid: { $ne: currentUserId } }]
 
-        fullName: new RegExp(searchKey, "i")
 
       },
     });
@@ -141,7 +143,7 @@ async function getUserList(req, res) {
   try {
     const results =
       await User.aggregate(aggregationPipeline);
-    
+
     res.status(200).send({ results, success: true });
   } catch (error) {
     res
