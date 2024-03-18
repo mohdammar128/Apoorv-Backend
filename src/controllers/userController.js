@@ -102,15 +102,21 @@ async function getUserList(req, res) {
   const sortOrder = req.query.order ? parseInt(req.query.order) : null;
 
   const aggregationPipeline = [];
+  aggregationPipeline.push({
+    $match: {
+      $and: [
+        { isActive: true },
+        { role: "user" },
+      ],
+    },
+  })
 
   if (searchKey) {
     aggregationPipeline.push({
       $match: {
-        $and: [
-          { fullName: new RegExp(searchKey, "i") },
-          { isActive: true },
-          { role: "user" },
-        ],
+
+        fullName: new RegExp(searchKey, "i")
+
       },
     });
   }
@@ -128,14 +134,14 @@ async function getUserList(req, res) {
     sortObj[sortField] = sortOrder === null ? 1 : sortOrder;
     aggregationPipeline.push({ $sort: sortObj });
   }
+  else {
+    aggregationPipeline.push({ $sort: { fullName: 1 } });
+  }
 
   try {
     const results =
-      aggregationPipeline.length !== 0
-        ? await User.aggregate(aggregationPipeline)
-        : await User.find({ isActive: true, role: "user" }).sort({
-            fullName: 1,
-          });
+      await User.aggregate(aggregationPipeline);
+    
     res.status(200).send({ results, success: true });
   } catch (error) {
     res
@@ -168,7 +174,7 @@ async function shopSignUp(req, res) {
 
 async function getShopList(req, res) {
   try {
-    const shops = await find({ role: "shop" });
+    const shops = await User.find({ role: "shop" });
     if (!shops) {
       res.status("No shops found in the database, please create the shops and try again.");
     }
