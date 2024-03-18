@@ -1,5 +1,4 @@
 const User = require("../model/User");
-
 async function signUp(req, res) {
   try {
     const {
