@@ -68,11 +68,12 @@ async function insertHomeFeed(req, res) {
         success: false,
         message: error.message
       });
-      
+
     }
     for (const feed of insertRes) {
       try {
-        await sendNotification(feed);
+        if (feed.priority === true)
+          await sendNotification(feed);
       } catch (error) {
         return res.status(400).send({
           error: `Error sending notification.`,
