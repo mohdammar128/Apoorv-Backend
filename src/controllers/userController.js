@@ -107,6 +107,7 @@ async function getUserList(req, res) {
       $and: [
         { isActive: true },
         { role: "user" },
+        { role: { $ne: "admin" } } // Exclude documents where role is "admin"
       ],
     },
   })
