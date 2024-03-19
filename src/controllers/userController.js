@@ -107,6 +107,7 @@ async function getUserList(req, res) {
       $and: [
         { isActive: true },
         { role: "user" },
+        
       ],
     },
   })
@@ -130,6 +131,7 @@ async function getUserList(req, res) {
     }
     aggregationPipeline.push({ $limit: num });
   }
+  
   if (sortField) {
     const sortObj = {};
     sortObj[sortField] = sortOrder === null ? 1 : sortOrder;
