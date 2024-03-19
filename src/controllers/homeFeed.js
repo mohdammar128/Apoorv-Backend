@@ -1,5 +1,5 @@
 const HomeFeed = require("../model/HomeFeed");
-const sendNotification = require("../utils/firebaseMessaging");
+// const sendNotification = require("../utils/firebaseMessaging");
 
 async function getHomeFeed(req, res) {
   try {
@@ -70,18 +70,18 @@ async function insertHomeFeed(req, res) {
       });
 
     }
-    for (const feed of insertRes) {
-      try {
-        if (feed.priority === true)
-          await sendNotification(feed);
-      } catch (error) {
-        return res.status(400).send({
-          error: `Error sending notification.`,
-          success: false,
-          message: error.message
-        });
-      }
-    }
+    // for (const feed of insertRes) {
+    //   try {
+    //     if (feed.priority === true)
+    //       await sendNotification(feed);
+    //   } catch (error) {
+    //     return res.status(400).send({
+    //       error: `Error sending notification.`,
+    //       success: false,
+    //       message: error.message
+    //     });
+    //   }
+    // }
     res.status(200).send({
       body: {
         insertRes
