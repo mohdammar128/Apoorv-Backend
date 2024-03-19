@@ -64,6 +64,7 @@ async function fetchAllTransaction(req, res) {
           { from: uid },
           { to: uid },
         ],
+        
       },
     },
     {
