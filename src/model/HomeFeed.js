@@ -16,7 +16,8 @@ const homeFeedSchema = new mongoose.Schema({
     default: true
   },
   priority: {
-    type: String
+    type: Boolean,
+    default:false
   }
 },
   {
