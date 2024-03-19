@@ -26,14 +26,16 @@ async function checkIfRepeatedTransaction(req, res, next) {
 async function transactionMiddleware(req, res, next) {
   try {
     const { from, to, amount } = req.body;
-    const fromUser = await User.findOne({ uid: from });
-
+    const fromUser = await User.findOne({ uid: from ,isActive:true });
+    if (!fromUser) {
+      return res.status(404).send({ error: "User details not found. Please refresh the page and try again.", success: false });
+    }
     if (fromUser.points < amount) {
       return res.status(502).send({ error: "Oops! It seems like you don't have sufficient points for this transaction. Why not try participating in more games to earn additional points?", success: false });
     }
-    const toUser = await User.findOne({ uid: to });
-    if (!toUser) {
-      return res.status(404).send({ error: "User details not found. Please refresh the page and try again.", success: false });
+    const toUser = await User.findOne({ uid: to ,isActive:true});
+    if (!toUser ) {
+      return res.status(404).send({ error: "Oops! It seems like the user you are trying to send money to does not exist or has deleted their account.", success: false });
     }
     req.body["toName"] = toUser.fullName;
    req.body["fromName"]=fromUser.fullName;
@@ -43,5 +45,7 @@ async function transactionMiddleware(req, res, next) {
     res.status(500).send({ error: "Error during the transaction. Please try again later.", success: false })
   }
 }
+
+
 
 module.exports = { transactionMiddleware, checkIfRepeatedTransaction };
