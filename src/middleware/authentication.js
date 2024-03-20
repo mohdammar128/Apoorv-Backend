@@ -1,6 +1,7 @@
 const User = require("../model/User");
 const admin = require("../config/firebaseCofig.js");
-
+const dotenv = require("dotenv");
+dotenv.config();
 async function checkAuthenticationMiddleware(request, response, next) {
   const headerToken = request.headers.authorization;
   try {

@@ -20,7 +20,7 @@ const {
   fetchAllTransaction,
 } = require("../controllers/transaction.js");
 
-const { getHomeFeed, insertHomeFeed, updateHomeFeed, deleteHomeFeed, updateHomeFeed, deleteHomeFeed } = require("../controllers/homeFeed.js");
+const { getHomeFeed, insertHomeFeed, updateHomeFeed, deleteHomeFeed} = require("../controllers/homeFeed.js");
 
 const router = express.Router();
 const {
