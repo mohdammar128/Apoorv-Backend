@@ -99,4 +99,30 @@ async function insertHomeFeed(req, res) {
   }
 }
 
-module.exports = { getHomeFeed, insertHomeFeed };
+async function updateHomeFeed(req, res) {
+  const id = req.params.id;
+  const { detailsToUpdate } = req.body;
+  try {
+    const updateDetails = { $set: detailsToUpdate };
+    const option = { new: true };
+    const response = await HomeFeed.findOneAndUpdate({ _id: id }, updateDetails, option);
+    res.status(200).send({ updatedDetails: response, success: true })
+  } catch (error) {
+    res.status(500).send({ error: "Updation failed ,please try again", success: false })
+  }
+}
+
+async function deleteHomeFeed(req,res) {
+  const { feedsToDelete } = req.body;
+  try {
+    if (!Array.isArray(feedsToDelete)) {
+      return res.status(409).send({ error: "Expected array of IDs to be passed ", success: false });
+    }
+    const deletedFeeds =await  HomeFeed.deleteMany({ _id: { $in: feedsToDelete } });
+    res.status(200).send({deletedFeeds,success:true})
+  } catch (error) {
+    res.status(500).send({ error: "Deletion failed ,please try again " });
+  }
+}
+
+module.exports = { getHomeFeed, insertHomeFeed,updateHomeFeed ,deleteHomeFeed};
