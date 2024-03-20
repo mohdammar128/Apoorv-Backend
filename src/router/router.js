@@ -19,7 +19,7 @@ const {
   fetchAllTransaction,
 } = require("../controllers/transaction.js");
 
-const { getHomeFeed, insertHomeFeed } = require("../controllers/homeFeed.js");
+const { getHomeFeed, insertHomeFeed, updateHomeFeed, deleteHomeFeed } = require("../controllers/homeFeed.js");
 
 const router = express.Router();
 const {
@@ -29,7 +29,11 @@ const {
 
 // HomeFeed Routes
 router.get("/feed", checkAuthenticationMiddleware, getHomeFeed);
-router.post("/feed", insertHomeFeed);
+//admin access of Homefeed
+router.post("/admin-access/feed", insertHomeFeed);
+router.get("/admin-access/feed",getHomeFeed);
+router.delete("/admin-access/feed",deleteHomeFeed);
+router.put("/admin-access/feed/:id",updateHomeFeed);
 
 // User route
 router.post("/user", checkAuthenticationMiddleware, checkUserExistenceMiddleware, signUp);
