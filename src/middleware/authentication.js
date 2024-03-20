@@ -69,4 +69,15 @@ async function checkShopAuthorizationMiddleware(req, res, next) {
   }
 }
 
-module.exports = { checkAuthenticationMiddleware, checkUserExistenceMiddleware, checkShopAuthorizationMiddleware };
+ async function authorizeAdminMiddleware(req, res,next) {
+  const password = req.headers.password;
+   if (!password) {
+    return res.status(404).send({error:"please provide password",success:false})
+   }
+   if (password !== process.env.PASSWORD) {
+     return res.status(403).send({ error: "OOPS you are not authorized admin" });
+   }
+   next();
+}
+
+module.exports = { checkAuthenticationMiddleware, checkUserExistenceMiddleware, checkShopAuthorizationMiddleware ,authorizeAdminMiddleware };

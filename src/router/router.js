@@ -3,6 +3,7 @@ const {
   checkAuthenticationMiddleware,
   checkUserExistenceMiddleware,
   checkShopAuthorizationMiddleware,
+  authorizeAdminMiddleware,
 } = require("../middleware/authentication.js");
 const {
   signUp,
@@ -19,7 +20,7 @@ const {
   fetchAllTransaction,
 } = require("../controllers/transaction.js");
 
-const { getHomeFeed, insertHomeFeed, updateHomeFeed, deleteHomeFeed } = require("../controllers/homeFeed.js");
+const { getHomeFeed, insertHomeFeed, updateHomeFeed, deleteHomeFeed, updateHomeFeed, deleteHomeFeed } = require("../controllers/homeFeed.js");
 
 const router = express.Router();
 const {
@@ -27,18 +28,21 @@ const {
   checkIfRepeatedTransaction,
 } = require("../middleware/transactionMiddleware.js");
 
+//admin access 
+router.post("/admin-access/feed",authorizeAdminMiddleware, insertHomeFeed);
+router.get("/admin-access/feed",authorizeAdminMiddleware, getHomeFeed);
+router.delete("/admin-access/feed",authorizeAdminMiddleware, deleteHomeFeed);
+router.put("/admin-access/feed/:id",authorizeAdminMiddleware, updateHomeFeed);
+router.get("/admin-access/user/:uid",authorizeAdminMiddleware, getUserDetails);
+router.get("/admin-access/user-list",authorizeAdminMiddleware, getUserList);
+router.delete("/admin-access/user/:uid",authorizeAdminMiddleware, deleteUser);
+//EventMap Route
+
 // HomeFeed Routes
 router.get("/feed", checkAuthenticationMiddleware, getHomeFeed);
-//admin access of Homefeed
-router.post("/admin-access/feed", insertHomeFeed);
-router.get("/admin-access/feed",getHomeFeed);
-router.delete("/admin-access/feed",deleteHomeFeed);
-router.put("/admin-access/feed/:id",updateHomeFeed);
-
 // User route
 router.post("/user", checkAuthenticationMiddleware, checkUserExistenceMiddleware, signUp);
 router.get("/user/:uid", checkAuthenticationMiddleware, getUserDetails);
-router.delete("/user/:uid", deleteUser);
 router.get("/user-list", checkAuthenticationMiddleware, getUserList);
 
 // Shopkeeper routes
@@ -47,6 +51,7 @@ router.post("/shop", checkUserExistenceMiddleware, shopSignUp);
 router.get("/shops", getShopList);
 router.put("/shop/password", updateShopPassword);
 router.get("/shop/:uid", checkAuthenticationMiddleware, checkShopAuthorizationMiddleware, getUserDetails);
+//transaction
 router.post(
   "/shop/transaction",
   checkShopAuthorizationMiddleware,
