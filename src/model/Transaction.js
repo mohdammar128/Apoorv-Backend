@@ -15,19 +15,23 @@ const transactionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    toName:{
-      type:String,
-      required:true
+    toName: {
+      type: String,
+      required: true
     },
-fromName:{
-   type:String,
-   required:true
-},
+    fromName: {
+      type: String,
+      required: true
+    },
     transactionValue: {
       type: Number,
       required: true,
+    },
+    cardId: {
+    type:Number
     }
   },
+
   {
     timestamps: true,
 

@@ -3,7 +3,7 @@ const User = require("../model/User");
 const Transaction = require("../model/Transaction");
 
 async function transferPoints(req, res) {
-  const { transactionType, from, to, amount ,toName,fromName} = req.body;
+  const { transactionType, from, to, amount ,toName,fromName,cardId} = req.body;
   const session = await mongoose.startSession();
   try { 
     session.startTransaction();
@@ -18,13 +18,15 @@ async function transferPoints(req, res) {
       { session, new: true }
 
     ); // Lock and update
+
     const newTrxn = new Transaction({
       transactionType,
       from: from,
       to: to,
       transactionValue: amount,
       toName,
-      fromName
+      fromName,
+      cardId
     });
 
     const response = await newTrxn.save({ session });

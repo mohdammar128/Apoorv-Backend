@@ -1,6 +1,7 @@
 const User = require("../model/User");
 const admin = require("../config/firebaseCofig.js");
 const dotenv = require("dotenv");
+const Transaction = require("../model/Transaction.js");
 dotenv.config();
 async function checkAuthenticationMiddleware(request, response, next) {
   const headerToken = request.headers.authorization;
@@ -43,7 +44,7 @@ async function checkUserExistenceMiddleware(req, res, next) {
 }
 
 async function checkShopAuthorizationMiddleware(req, res, next) {
-  const { from, password, email } = req.body; // assuming 'email' is also coming from the request body
+  const { from, password, email,cardId } = req.body; // assuming 'email' is also coming from the request body
   try {
     const shopKeeper = await User.findOne({ uid: from });
     if (
@@ -56,6 +57,10 @@ async function checkShopAuthorizationMiddleware(req, res, next) {
           "Unauthorized: You are not recognized as a shopkeeper. Please review your details.",
         success: false,
       });
+    }
+    const punchCard = await Transaction.findOne({ from: from, cardId });
+    if (punchCard) {
+    return  res.status(400).send({ error: "Invalid card Id", success: false });
     }
     console.log(shopKeeper);
     next();
