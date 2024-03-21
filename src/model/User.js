@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     points: {
       type: Number,
-      default: 50,
+      default: 0,
     },
 
     isActive: {
