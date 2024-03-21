@@ -36,6 +36,8 @@ router.put("/admin-access/feed/:id",authorizeAdminMiddleware, updateHomeFeed);
 router.get("/admin-access/user/:uid",authorizeAdminMiddleware, getUserDetails);
 router.get("/admin-access/user-list",authorizeAdminMiddleware, getUserList);
 router.delete("/admin-access/user/:uid",authorizeAdminMiddleware, deleteUser);
+router.get("/shops", getShopList);
+router.put("/shop/password", updateShopPassword);
 //EventMap Route
 
 // HomeFeed Routes
@@ -48,8 +50,6 @@ router.get("/user-list", checkAuthenticationMiddleware, getUserList);
 // Shopkeeper routes
 // router.post("/shop", checkAuthenticationMiddleware, checkUserExistenceMiddleware, shopSignUp);
 router.post("/shop", checkUserExistenceMiddleware, shopSignUp);
-router.get("/shops", getShopList);
-router.put("/shop/password", updateShopPassword);
 router.get("/shop/:uid", checkAuthenticationMiddleware, checkShopAuthorizationMiddleware, getUserDetails);
 //transaction
 router.post(

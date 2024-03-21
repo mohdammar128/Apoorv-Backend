@@ -64,6 +64,7 @@ async function getUserDetails(req, res) {
         phone: userDetails.phone,
         collegeName: userDetails.collegeName,
         photoUrl: userDetails.profileImage,
+        pointsArray:userDetails.pointsArray
       },
       success: true,
     });
@@ -209,6 +210,8 @@ async function updateShopPassword(req, res) {
     });
   }
 }
+
+
 
 module.exports = {
   signUp,
