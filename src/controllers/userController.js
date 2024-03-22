@@ -211,6 +211,21 @@ async function updateShopPassword(req, res) {
   }
 }
 
+// ---------This portion is for only manually getting uids---------------------
+async function getUids(req, res) {
+  const {emails} = req.body;
+  try {
+    const users = await User.find({ email: { $in: emails } });
+    const userIdsAndEmails = users.map(user => ({
+      uid: user.uid,
+      email: user.email
+    }));
+    res.status(200).send({ userIdsAndEmails });
+  } catch (error) {
+    res.status(500).send({ error: "Something went wrong" });
+  }
+}
+
 
 
 module.exports = {
@@ -220,5 +235,6 @@ module.exports = {
   getUserList,
   getShopList,
   shopSignUp,
-  updateShopPassword
+  updateShopPassword,
+  getUids,
 };

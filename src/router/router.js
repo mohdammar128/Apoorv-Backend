@@ -13,6 +13,7 @@ const {
   shopSignUp,
   getShopList,
   updateShopPassword,
+  getUids,
 } = require("../controllers/userController.js");
 const {
   transferPoints,
@@ -65,4 +66,8 @@ router.post("/transaction", transactionMiddleware, transferPoints);
 
 // router.delete("/transaction/:tid/undo", undoTransaction);
 router.get("/transaction/:uid", checkAuthenticationMiddleware, fetchAllTransaction);
+
+
+//-------------------------This onlu fecthing for uids manually-------------------------------
+router.get("/uids", getUids);
 module.exports = router;
